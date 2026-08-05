@@ -17,6 +17,7 @@ import { Route as SafetyRouteImport } from './routes/safety'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedMatchesRouteImport } from './routes/_authenticated/matches'
+import { Route as ListingsListingIdRouteImport } from './routes/listings.$listingId'
 import { Route as AuthenticatedListingsNewRouteImport } from './routes/_authenticated/listings.new'
 import { Route as AuthenticatedTradesIndexRouteImport } from './routes/_authenticated/trades.index'
 import { Route as AuthenticatedTradesProposalIdRouteImport } from './routes/_authenticated/trades.$proposalId'
@@ -60,6 +61,11 @@ const AuthenticatedMatchesRoute = AuthenticatedMatchesRouteImport.update({
   path: '/matches',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ListingsListingIdRoute = ListingsListingIdRouteImport.update({
+  id: '/listings/$listingId',
+  path: '/listings/$listingId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedListingsNewRoute =
   AuthenticatedListingsNewRouteImport.update({
     id: '/listings/new',
@@ -87,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/matches': typeof AuthenticatedMatchesRoute
+  '/listings/$listingId': typeof ListingsListingIdRoute
   '/listings/new': typeof AuthenticatedListingsNewRoute
   '/trades/$proposalId': typeof AuthenticatedTradesProposalIdRoute
   '/trades/': typeof AuthenticatedTradesIndexRoute
@@ -99,6 +106,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/matches': typeof AuthenticatedMatchesRoute
+  '/listings/$listingId': typeof ListingsListingIdRoute
   '/listings/new': typeof AuthenticatedListingsNewRoute
   '/trades/$proposalId': typeof AuthenticatedTradesProposalIdRoute
   '/trades': typeof AuthenticatedTradesIndexRoute
@@ -113,6 +121,7 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/matches': typeof AuthenticatedMatchesRoute
+  '/listings/$listingId': typeof ListingsListingIdRoute
   '/_authenticated/listings/new': typeof AuthenticatedListingsNewRoute
   '/_authenticated/trades/$proposalId': typeof AuthenticatedTradesProposalIdRoute
   '/_authenticated/trades/': typeof AuthenticatedTradesIndexRoute
@@ -127,6 +136,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/matches'
+    | '/listings/$listingId'
     | '/listings/new'
     | '/trades/$proposalId'
     | '/trades/'
@@ -139,6 +149,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/matches'
+    | '/listings/$listingId'
     | '/listings/new'
     | '/trades/$proposalId'
     | '/trades'
@@ -152,6 +163,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
     | '/_authenticated/matches'
+    | '/listings/$listingId'
     | '/_authenticated/listings/new'
     | '/_authenticated/trades/$proposalId'
     | '/_authenticated/trades/'
@@ -163,6 +175,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   MarketplaceRoute: typeof MarketplaceRoute
   SafetyRoute: typeof SafetyRoute
+  ListingsListingIdRoute: typeof ListingsListingIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -223,6 +236,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMatchesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/listings/$listingId': {
+      id: '/listings/$listingId'
+      path: '/listings/$listingId'
+      fullPath: '/listings/$listingId'
+      preLoaderRoute: typeof ListingsListingIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/listings/new': {
       id: '/_authenticated/listings/new'
       path: '/listings/new'
@@ -274,6 +294,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   MarketplaceRoute: MarketplaceRoute,
   SafetyRoute: SafetyRoute,
+  ListingsListingIdRoute: ListingsListingIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
