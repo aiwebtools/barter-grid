@@ -24,6 +24,10 @@ import { ArrowLeft, ArrowLeftRight, Send, Star, ShieldAlert } from "lucide-react
 import { db, fetchMessages, fetchProposal, type ProposalStatus } from "@/lib/db";
 import { formatValue, timeAgo } from "@/lib/barter";
 import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
+import { MeetupPanel } from "@/components/meetup-panel";
+import { CryptoSettlementPanel } from "@/components/crypto-settlement-panel";
+
 
 export const Route = createFileRoute("/_authenticated/trades/$proposalId")({
   head: () => ({
