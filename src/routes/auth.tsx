@@ -48,14 +48,20 @@ function AuthPage() {
     setBusy(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success("Welcome back");
     navigate({ to: "/dashboard" });
   }
 
   async function signUp(e: React.FormEvent) {
     e.preventDefault();
-    if (password.length < 8) return toast.error("Use at least 8 characters for your password.");
+    if (password.length < 8) {
+      toast.error("Use at least 8 characters for your password.");
+      return;
+    }
     setBusy(true);
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -66,7 +72,10 @@ function AuthPage() {
       },
     });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     if (!data.session) {
       setCheckEmail(true);
       return;
@@ -78,10 +87,14 @@ function AuthPage() {
     const result = await lovable.auth.signInWithOAuth("google", {
       redirect_uri: window.location.origin,
     });
-    if (result.error) return toast.error("Google sign-in failed. Try again.");
+    if (result.error) {
+      toast.error("Google sign-in failed. Try again.");
+      return;
+    }
     if (result.redirected) return;
     navigate({ to: "/dashboard" });
   }
+
 
   return (
     <div className="grid-texture flex min-h-[80vh] items-center justify-center px-4 py-12">
