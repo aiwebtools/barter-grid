@@ -14,6 +14,86 @@ export type Database = {
   }
   public: {
     Tables: {
+      crypto_payments: {
+        Row: {
+          amount: number
+          asset: string
+          chain: string
+          created_at: string
+          id: string
+          memo: string | null
+          payee_id: string
+          payer_id: string
+          proposal_id: string
+          requested_by: string
+          status: Database["public"]["Enums"]["crypto_payment_status"]
+          tx_hash: string | null
+          updated_at: string
+          wallet_address: string
+        }
+        Insert: {
+          amount: number
+          asset: string
+          chain: string
+          created_at?: string
+          id?: string
+          memo?: string | null
+          payee_id: string
+          payer_id: string
+          proposal_id: string
+          requested_by: string
+          status?: Database["public"]["Enums"]["crypto_payment_status"]
+          tx_hash?: string | null
+          updated_at?: string
+          wallet_address: string
+        }
+        Update: {
+          amount?: number
+          asset?: string
+          chain?: string
+          created_at?: string
+          id?: string
+          memo?: string | null
+          payee_id?: string
+          payer_id?: string
+          proposal_id?: string
+          requested_by?: string
+          status?: Database["public"]["Enums"]["crypto_payment_status"]
+          tx_hash?: string | null
+          updated_at?: string
+          wallet_address?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crypto_payments_payee_id_fkey"
+            columns: ["payee_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crypto_payments_payer_id_fkey"
+            columns: ["payer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crypto_payments_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: false
+            referencedRelation: "trade_proposals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crypto_payments_requested_by_fkey"
+            columns: ["requested_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       listing_photos: {
         Row: {
           caption: string | null
@@ -116,6 +196,57 @@ export type Database = {
             columns: ["owner_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      meetups: {
+        Row: {
+          created_at: string
+          created_by: string
+          id: string
+          location: string
+          notes: string | null
+          proposal_id: string
+          scheduled_at: string
+          status: Database["public"]["Enums"]["meetup_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          id?: string
+          location: string
+          notes?: string | null
+          proposal_id: string
+          scheduled_at: string
+          status?: Database["public"]["Enums"]["meetup_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          id?: string
+          location?: string
+          notes?: string | null
+          proposal_id?: string
+          scheduled_at?: string
+          status?: Database["public"]["Enums"]["meetup_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meetups_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "meetups_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: false
+            referencedRelation: "trade_proposals"
             referencedColumns: ["id"]
           },
         ]
@@ -508,6 +639,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "member"
+      crypto_payment_status: "requested" | "sent" | "confirmed" | "cancelled"
       listing_category:
         | "food"
         | "water"
@@ -523,6 +655,12 @@ export type Database = {
         | "other"
       listing_condition: "new" | "like_new" | "good" | "fair" | "worn" | "na"
       listing_status: "active" | "pending" | "traded" | "archived"
+      meetup_status:
+        | "proposed"
+        | "confirmed"
+        | "declined"
+        | "cancelled"
+        | "completed"
       offer_type: "offering" | "seeking" | "both"
       proposal_status:
         | "pending"
@@ -660,6 +798,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "member"],
+      crypto_payment_status: ["requested", "sent", "confirmed", "cancelled"],
       listing_category: [
         "food",
         "water",
@@ -676,6 +815,13 @@ export const Constants = {
       ],
       listing_condition: ["new", "like_new", "good", "fair", "worn", "na"],
       listing_status: ["active", "pending", "traded", "archived"],
+      meetup_status: [
+        "proposed",
+        "confirmed",
+        "declined",
+        "cancelled",
+        "completed",
+      ],
       offer_type: ["offering", "seeking", "both"],
       proposal_status: [
         "pending",
