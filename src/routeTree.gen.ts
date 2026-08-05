@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as SafetyRouteImport } from './routes/safety'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedMatchesRouteImport } from './routes/_authenticated/matches'
 import { Route as AuthenticatedListingsNewRouteImport } from './routes/_authenticated/listings.new'
 
 const IndexRoute = IndexRouteImport.update({
@@ -46,6 +47,11 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedMatchesRoute = AuthenticatedMatchesRouteImport.update({
+  id: '/matches',
+  path: '/matches',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedListingsNewRoute =
   AuthenticatedListingsNewRouteImport.update({
     id: '/listings/new',
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/marketplace': typeof MarketplaceRoute
   '/safety': typeof SafetyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/matches': typeof AuthenticatedMatchesRoute
   '/listings/new': typeof AuthenticatedListingsNewRoute
 }
 export interface FileRoutesByTo {
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/marketplace': typeof MarketplaceRoute
   '/safety': typeof SafetyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/matches': typeof AuthenticatedMatchesRoute
   '/listings/new': typeof AuthenticatedListingsNewRoute
 }
 export interface FileRoutesById {
@@ -77,15 +85,28 @@ export interface FileRoutesById {
   '/marketplace': typeof MarketplaceRoute
   '/safety': typeof SafetyRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/matches': typeof AuthenticatedMatchesRoute
   '/_authenticated/listings/new': typeof AuthenticatedListingsNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/auth' | '/marketplace' | '/safety' | '/dashboard' | '/listings/new'
+    | '/'
+    | '/auth'
+    | '/marketplace'
+    | '/safety'
+    | '/dashboard'
+    | '/matches'
+    | '/listings/new'
   fileRoutesByTo: FileRoutesByTo
   to:
-    '/' | '/auth' | '/marketplace' | '/safety' | '/dashboard' | '/listings/new'
+    | '/'
+    | '/auth'
+    | '/marketplace'
+    | '/safety'
+    | '/dashboard'
+    | '/matches'
+    | '/listings/new'
   id:
     | '__root__'
     | '/'
@@ -94,6 +115,7 @@ export interface FileRouteTypes {
     | '/marketplace'
     | '/safety'
     | '/_authenticated/dashboard'
+    | '/_authenticated/matches'
     | '/_authenticated/listings/new'
   fileRoutesById: FileRoutesById
 }
@@ -149,6 +171,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/matches': {
+      id: '/_authenticated/matches'
+      path: '/matches'
+      fullPath: '/matches'
+      preLoaderRoute: typeof AuthenticatedMatchesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/listings/new': {
       id: '/_authenticated/listings/new'
       path: '/listings/new'
@@ -161,11 +190,13 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedMatchesRoute: typeof AuthenticatedMatchesRoute
   AuthenticatedListingsNewRoute: typeof AuthenticatedListingsNewRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedMatchesRoute: AuthenticatedMatchesRoute,
   AuthenticatedListingsNewRoute: AuthenticatedListingsNewRoute,
 }
 
