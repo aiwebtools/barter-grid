@@ -24,6 +24,10 @@ import { ArrowLeft, ArrowLeftRight, Send, Star, ShieldAlert } from "lucide-react
 import { db, fetchMessages, fetchProposal, type ProposalStatus } from "@/lib/db";
 import { formatValue, timeAgo } from "@/lib/barter";
 import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/integrations/supabase/client";
+import { MeetupPanel } from "@/components/meetup-panel";
+import { CryptoSettlementPanel } from "@/components/crypto-settlement-panel";
+
 
 export const Route = createFileRoute("/_authenticated/trades/$proposalId")({
   head: () => ({
@@ -72,12 +76,47 @@ function TradeThread() {
   const { data: messages } = useQuery({
     queryKey: ["messages", proposalId],
     queryFn: () => fetchMessages(proposalId),
-    refetchInterval: 15000,
+    refetchInterval: 30000,
   });
+
+  useEffect(() => {
+    const channel = supabase
+      .channel(`trade-${proposalId}`)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "messages", filter: `proposal_id=eq.${proposalId}` },
+        () => queryClient.invalidateQueries({ queryKey: ["messages", proposalId] }),
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "meetups", filter: `proposal_id=eq.${proposalId}` },
+        () => queryClient.invalidateQueries({ queryKey: ["meetups", proposalId] }),
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "crypto_payments",
+          filter: `proposal_id=eq.${proposalId}`,
+        },
+        () => queryClient.invalidateQueries({ queryKey: ["crypto-payments", proposalId] }),
+      )
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "trade_proposals", filter: `id=eq.${proposalId}` },
+        () => queryClient.invalidateQueries({ queryKey: ["proposal", proposalId] }),
+      )
+      .subscribe();
+    return () => {
+      void supabase.removeChannel(channel);
+    };
+  }, [proposalId, queryClient]);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ block: "nearest" });
   }, [messages?.length]);
+
 
   const sendMessage = useMutation({
     mutationFn: async () => {
@@ -427,6 +466,16 @@ function TradeThread() {
           </Button>
         </form>
       </Card>
+
+      <MeetupPanel proposalId={proposalId} userId={user.id} />
+
+      <CryptoSettlementPanel
+        proposalId={proposalId}
+        userId={user.id}
+        counterpartId={isRecipient ? proposal.proposer_id : proposal.recipient_id}
+        counterpartName={counterpart?.display_name ?? "the other trader"}
+      />
     </div>
+
   );
 }
