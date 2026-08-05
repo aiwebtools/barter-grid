@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as SafetyRouteImport } from './routes/safety'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedMatchesRouteImport } from './routes/_authenticated/matches'
 import { Route as AuthenticatedListingsNewRouteImport } from './routes/_authenticated/listings.new'
@@ -43,6 +44,11 @@ const SafetyRoute = SafetyRouteImport.update({
   id: '/safety',
   path: '/safety',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
@@ -78,6 +84,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/marketplace': typeof MarketplaceRoute
   '/safety': typeof SafetyRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/matches': typeof AuthenticatedMatchesRoute
   '/listings/new': typeof AuthenticatedListingsNewRoute
@@ -89,6 +96,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/marketplace': typeof MarketplaceRoute
   '/safety': typeof SafetyRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/matches': typeof AuthenticatedMatchesRoute
   '/listings/new': typeof AuthenticatedListingsNewRoute
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/marketplace': typeof MarketplaceRoute
   '/safety': typeof SafetyRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/matches': typeof AuthenticatedMatchesRoute
   '/_authenticated/listings/new': typeof AuthenticatedListingsNewRoute
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/marketplace'
     | '/safety'
+    | '/admin'
     | '/dashboard'
     | '/matches'
     | '/listings/new'
@@ -126,6 +136,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/marketplace'
     | '/safety'
+    | '/admin'
     | '/dashboard'
     | '/matches'
     | '/listings/new'
@@ -138,6 +149,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/marketplace'
     | '/safety'
+    | '/_authenticated/admin'
     | '/_authenticated/dashboard'
     | '/_authenticated/matches'
     | '/_authenticated/listings/new'
@@ -190,6 +202,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SafetyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -229,6 +248,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedMatchesRoute: typeof AuthenticatedMatchesRoute
   AuthenticatedListingsNewRoute: typeof AuthenticatedListingsNewRoute
@@ -237,6 +257,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedMatchesRoute: AuthenticatedMatchesRoute,
   AuthenticatedListingsNewRoute: AuthenticatedListingsNewRoute,
