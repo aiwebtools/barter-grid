@@ -466,6 +466,16 @@ function TradeThread() {
           </Button>
         </form>
       </Card>
+
+      <MeetupPanel proposalId={proposalId} userId={user.id} />
+
+      <CryptoSettlementPanel
+        proposalId={proposalId}
+        userId={user.id}
+        counterpartId={isRecipient ? proposal.proposer_id : proposal.recipient_id}
+        counterpartName={counterpart?.display_name ?? "the other trader"}
+      />
     </div>
+
   );
 }
