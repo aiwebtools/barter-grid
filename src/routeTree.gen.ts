@@ -18,6 +18,7 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedMatchesRouteImport } from './routes/_authenticated/matches'
 import { Route as AuthenticatedListingsNewRouteImport } from './routes/_authenticated/listings.new'
 import { Route as AuthenticatedTradesIndexRouteImport } from './routes/_authenticated/trades.index'
+import { Route as AuthenticatedTradesProposalIdRouteImport } from './routes/_authenticated/trades.$proposalId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -65,6 +66,12 @@ const AuthenticatedTradesIndexRoute =
     path: '/trades/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedTradesProposalIdRoute =
+  AuthenticatedTradesProposalIdRouteImport.update({
+    id: '/trades/$proposalId',
+    path: '/trades/$proposalId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/matches': typeof AuthenticatedMatchesRoute
   '/listings/new': typeof AuthenticatedListingsNewRoute
+  '/trades/$proposalId': typeof AuthenticatedTradesProposalIdRoute
   '/trades/': typeof AuthenticatedTradesIndexRoute
 }
 export interface FileRoutesByTo {
@@ -84,6 +92,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/matches': typeof AuthenticatedMatchesRoute
   '/listings/new': typeof AuthenticatedListingsNewRoute
+  '/trades/$proposalId': typeof AuthenticatedTradesProposalIdRoute
   '/trades': typeof AuthenticatedTradesIndexRoute
 }
 export interface FileRoutesById {
@@ -96,6 +105,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/matches': typeof AuthenticatedMatchesRoute
   '/_authenticated/listings/new': typeof AuthenticatedListingsNewRoute
+  '/_authenticated/trades/$proposalId': typeof AuthenticatedTradesProposalIdRoute
   '/_authenticated/trades/': typeof AuthenticatedTradesIndexRoute
 }
 export interface FileRouteTypes {
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/matches'
     | '/listings/new'
+    | '/trades/$proposalId'
     | '/trades/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/matches'
     | '/listings/new'
+    | '/trades/$proposalId'
     | '/trades'
   id:
     | '__root__'
@@ -129,6 +141,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/matches'
     | '/_authenticated/listings/new'
+    | '/_authenticated/trades/$proposalId'
     | '/_authenticated/trades/'
   fileRoutesById: FileRoutesById
 }
@@ -205,6 +218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTradesIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/trades/$proposalId': {
+      id: '/_authenticated/trades/$proposalId'
+      path: '/trades/$proposalId'
+      fullPath: '/trades/$proposalId'
+      preLoaderRoute: typeof AuthenticatedTradesProposalIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -212,6 +232,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedMatchesRoute: typeof AuthenticatedMatchesRoute
   AuthenticatedListingsNewRoute: typeof AuthenticatedListingsNewRoute
+  AuthenticatedTradesProposalIdRoute: typeof AuthenticatedTradesProposalIdRoute
   AuthenticatedTradesIndexRoute: typeof AuthenticatedTradesIndexRoute
 }
 
@@ -219,6 +240,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedMatchesRoute: AuthenticatedMatchesRoute,
   AuthenticatedListingsNewRoute: AuthenticatedListingsNewRoute,
+  AuthenticatedTradesProposalIdRoute: AuthenticatedTradesProposalIdRoute,
   AuthenticatedTradesIndexRoute: AuthenticatedTradesIndexRoute,
 }
 
