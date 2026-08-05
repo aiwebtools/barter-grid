@@ -237,3 +237,60 @@ export async function fetchMessages(proposalId: string): Promise<TradeMessage[]>
   if (error) throw error;
   return (data ?? []) as TradeMessage[];
 }
+
+/* ---------- Meetups ---------- */
+
+export type MeetupStatus = "proposed" | "confirmed" | "declined" | "cancelled" | "completed";
+
+export interface Meetup {
+  id: string;
+  proposal_id: string;
+  created_by: string;
+  scheduled_at: string;
+  location: string;
+  notes: string | null;
+  status: MeetupStatus;
+  created_at: string;
+  updated_at: string;
+}
+
+export async function fetchMeetups(proposalId: string): Promise<Meetup[]> {
+  const { data, error } = await db
+    .from("meetups")
+    .select("*")
+    .eq("proposal_id", proposalId)
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return (data ?? []) as Meetup[];
+}
+
+/* ---------- Crypto settlements ---------- */
+
+export type CryptoPaymentStatus = "requested" | "sent" | "confirmed" | "cancelled";
+
+export interface CryptoPayment {
+  id: string;
+  proposal_id: string;
+  requested_by: string;
+  payer_id: string;
+  payee_id: string;
+  chain: string;
+  asset: string;
+  amount: number;
+  wallet_address: string;
+  memo: string | null;
+  tx_hash: string | null;
+  status: CryptoPaymentStatus;
+  created_at: string;
+  updated_at: string;
+}
+
+export async function fetchCryptoPayments(proposalId: string): Promise<CryptoPayment[]> {
+  const { data, error } = await db
+    .from("crypto_payments")
+    .select("*")
+    .eq("proposal_id", proposalId)
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return (data ?? []) as CryptoPayment[];
+}
