@@ -118,7 +118,7 @@ export function CryptoSettlementPanel({
     }: {
       payment: CryptoPayment;
       status: CryptoPaymentStatus;
-      txHash?: string;
+      txHash?: string | undefined;
     }) => {
       if (status === "sent") {
         const tx = (txHash ?? "").trim();
